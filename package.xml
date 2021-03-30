@@ -3,9 +3,12 @@
 <package format="3">
   <name>servo_hoge</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>servo test</description>
   <maintainer email="matsuta2718@gmail.com">ashikaga</maintainer>
-  <license>TODO: License declaration</license>
+  <license>BSD</license>
+  <!-- <exec_depend>rclpy</exec_depend> -->
+  <exec_depend>pigpio</exec_depend>
+  <exec_depend>time<exec_depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

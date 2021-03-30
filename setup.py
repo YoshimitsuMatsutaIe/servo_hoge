@@ -1,4 +1,6 @@
 from setuptools import setup
+import os
+from glob import glob
 
 package_name = 'servo_hoge'
 
@@ -15,11 +17,12 @@ setup(
     zip_safe=True,
     maintainer='ashikaga',
     maintainer_email='matsuta2718@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='servo test',
+    license='BSD',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'servo = servo_hoge.servo:main'
         ],
     },
 )
