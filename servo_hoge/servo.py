@@ -1,25 +1,57 @@
-# import rclpy
-# from rclpy.node import Node
-
-# import pigpio
-
-# rclpy.init()
-# node = Node("servo")
-
+import rclpy
+from rclpy.node import Node
+from rclpy.executors import SingleThreadedExecutor
+from std_msgs.msg import Int16
 import time
 import pigpio
 
-SERVO_PIN = 23
+#SERVO_PIN = 23
+
 PULSE_MIN = 500 + 10
 PULSE_MAX = 2500 - 10
 
-def angle(theta):
-    return (theta / 180) * (PULSE_MAX - PULSE_MIN)
+SERVO_PIN_1 = 23
+SERVO_PIN_2 = 24
 
-pi = pigpio.pi()
+def pulse(ANGLE):
+    """ANGLE[degree]からpwnパルス値を計算"""
+    return (ANGLE / 180) * (PULSE_MAX - PULSE_MIN) + PULSE_MIN
 
-pi.set_servo_pulsewidth(SERVO_PIN, angle(0))
 
-time.sleep(1)
+class ServoNode(Node):
+    
+    def __init__(self, SERVO_PIN):
+        super().__init__("Servo")
+        self.SERVO_PIN = SERVO_PIN
+        self.create_subscription(Int16, "servo", self.servo_callback, 10)
+    
+    def servo_callback(self, ANGLE):
+        """ANGLEにINT16？の信号がくる？"""
+        pi = pigpio.pi()
+        pi.set_servo_pulsewidth(self.SERVO_PIN, pulse(ANGLE))
 
-pi.set_servo_pulsewidth(SERVO_PIN, angle(45))
+
+def main():
+    rclpy.init()
+    executor = SingleThreadedExecutor()
+    
+    ## ノードを2つインスタンス化しexecutorにadd
+    servo_1 = ServoNode(SERVO_PIN_1)
+    servo_2 = ServoNode(SERVO_PIN_2)
+    executor.add_node(servo_1)
+    executor.add_node(servo_2)
+    
+    try:
+        executor.spin()  # 無限ループ？
+    except KeyboardInterrupt:  # Ctrl-C
+        pass
+    
+    ## ノード殺す
+    executor.shutdown()
+    servo_1.destroy_node()
+    servo_2.destroy_node()
+    rclpy.shutdown()
+
+
+if __name__ == '__main__':
+    main()
