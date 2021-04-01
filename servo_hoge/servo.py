@@ -20,49 +20,69 @@ def pulse(ANGLE):
 
 class ServoNode(Node):
     
-    def __init__(self, SERVO_PIN):
-        super().__init__("Servo")
-        self.SERVO_PIN = SERVO_PIN
-        self.sub_servo = self.create_subscription(
+    #def __init__(self, SERVO_PIN):
+    def __init__(self):
+        super().__init__("servo")
+        #self.SERVO_PIN = SERVO_PIN
+        print("ピン")
+        self.create_subscription(
             Int16, 
             "servo", 
             self.servo_callback, 
             10,
             )
     
-    def servo_callback(self, ANGLE):
+    def servo_callback(self, msg):
         """ANGLEにINT16？の信号がくる？"""
-        pi = pigpio.pi()
-        pi.set_servo_pulsewidth(
-            self.SERVO_PIN, 
-            pulse(ANGLE),
-            )
-        self.get_logger().info('servo_exec: %d' % ANGLE)
+        # pi = pigpio.pi()
+        # pi.set_servo_pulsewidth(
+        #     self.SERVO_PIN, 
+        #     pulse(ANGLE),
+        #     )
+        self.get_logger().info('servo_exec: %d' % msg.data)
+
+
+# def main():
+#     rclpy.init()
+#     executor = SingleThreadedExecutor()
+    
+#     ## ノードをインスタンス化しexecutorにadd
+#     # 1個目
+#     servo_1 = ServoNode(SERVO_PIN_1)
+#     executor.add_node(servo_1)
+    
+#     # # 2個目
+#     # servo_2 = ServoNode(SERVO_PIN_2)
+#     # executor.add_node(servo_2)
+    
+#     try:
+#         executor.spin()  # 無限ループ？
+#     except KeyboardInterrupt:  # Ctrl-C
+#         pass
+    
+#     ## ノード殺す
+#     executor.shutdown()
+#     servo_1.destroy_node()
+#     #servo_2.destroy_node()
+#     rclpy.shutdown()
+
 
 
 def main():
     rclpy.init()
-    executor = SingleThreadedExecutor()
-    
-    ## ノードをインスタンス化しexecutorにadd
-    # 1個目
-    servo_1 = ServoNode(SERVO_PIN_1)
-    executor.add_node(servo_1)
-    
-    # # 2個目
-    # servo_2 = ServoNode(SERVO_PIN_2)
-    # executor.add_node(servo_2)
-    
+    #node = ServoNode(SERVO_PIN_1)
+    node = ServoNode()
     try:
-        executor.spin()  # 無限ループ？
+        rclpy.spin(node)  # 無限ループ？
     except KeyboardInterrupt:  # Ctrl-C
         pass
     
     ## ノード殺す
-    executor.shutdown()
-    servo_1.destroy_node()
+    node.destroy_node()
     #servo_2.destroy_node()
     rclpy.shutdown()
+
+
 
 
 if __name__ == '__main__':

@@ -19,10 +19,7 @@ def generate_launch_description():
         output='screen',
     )
     
-    return launch.LaunchDescription([
-        controller, 
-        servo,
-        ])
+    return launch.LaunchDescription([controller,])
 
 # def generate_launch_description():
     
