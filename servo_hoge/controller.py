@@ -4,33 +4,50 @@ from std_msgs.msg import Int16
 
 #import time
 
-# class ServoController(Node):
-#     def __init__(self):
-#         super().__init__('controller')
-#         self.create_publisher(Int16, "countup", 10)
+angle = 0
+
+class ControllerNode(Node):
+    """制御器のノード
+    ・サーボモータ司令を返す
+    """
     
-#     def callback(self, msg):
-#         self.publish(msg)
+    def __init__(self):
+        super().__init__('controller')
+        self.controller = self.create_publisher(
+            Int16, 
+            "countup", 
+            10,
+            )
+        self.timer = self.create_timer(
+            0.5, 
+            self.callback,
+            )
+    
+    
+    def callback(self):
+        global angle
+        command = Int16()
+        command.data = angle
+        self.controller.publish(command)
+        self.get_logger().info('controller: %d' % angle)
+        if angle > 179:
+            angle = 180
+        else:
+            angle += 1
+
 
 def main():
-    rclpy.init()
-    node = Node("controller")
-    pub = node.create_publisher(Int16, "countup", 10)
+    rclpy.init()  # 初期化？
+    node = ControllerNode()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    
+    # ノード殺す
+    node.destroy_node()
+    rclpy.shutdown()
 
-    n = 0  # パブリッシュする値。まずは初期化。
-
-    def callback():
-        global n
-        msg = Int16()
-        msg.data = n
-        pub.publish(msg)
-        if n > 179:
-            n = 180
-        else:
-            n += 1
-
-    node.create_timer(0.5, callback)
-    rclpy.spin(node)
 
 if __name__ == 'main':
     main()

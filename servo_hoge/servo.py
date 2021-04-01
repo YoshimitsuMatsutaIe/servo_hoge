@@ -23,23 +23,35 @@ class ServoNode(Node):
     def __init__(self, SERVO_PIN):
         super().__init__("Servo")
         self.SERVO_PIN = SERVO_PIN
-        self.create_subscription(Int16, "servo", self.servo_callback, 10)
+        self.sub_servo = self.create_subscription(
+            Int16, 
+            "servo", 
+            self.servo_callback, 
+            10,
+            )
     
     def servo_callback(self, ANGLE):
         """ANGLEにINT16？の信号がくる？"""
         pi = pigpio.pi()
-        pi.set_servo_pulsewidth(self.SERVO_PIN, pulse(ANGLE))
+        pi.set_servo_pulsewidth(
+            self.SERVO_PIN, 
+            pulse(ANGLE),
+            )
+        self.get_logger().info('servo_exec: %d' % ANGLE)
 
 
 def main():
     rclpy.init()
     executor = SingleThreadedExecutor()
     
-    ## ノードを2つインスタンス化しexecutorにadd
+    ## ノードをインスタンス化しexecutorにadd
+    # 1個目
     servo_1 = ServoNode(SERVO_PIN_1)
-    servo_2 = ServoNode(SERVO_PIN_2)
     executor.add_node(servo_1)
-    executor.add_node(servo_2)
+    
+    # # 2個目
+    # servo_2 = ServoNode(SERVO_PIN_2)
+    # executor.add_node(servo_2)
     
     try:
         executor.spin()  # 無限ループ？
@@ -49,7 +61,7 @@ def main():
     ## ノード殺す
     executor.shutdown()
     servo_1.destroy_node()
-    servo_2.destroy_node()
+    #servo_2.destroy_node()
     rclpy.shutdown()
 
 
