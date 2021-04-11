@@ -20,10 +20,10 @@ def pulse(ANGLE):
 
 class ServoNode(Node):
     
-    #def __init__(self, SERVO_PIN):
-    def __init__(self):
+    def __init__(self, SERVO_PIN):
+    #def __init__(self):
         super().__init__("servo")
-        #self.SERVO_PIN = SERVO_PIN
+        self.SERVO_PIN = SERVO_PIN
         print("ピン")
         self.create_subscription(
             Int16, 
@@ -37,50 +37,50 @@ class ServoNode(Node):
         # pi = pigpio.pi()
         # pi.set_servo_pulsewidth(
         #     self.SERVO_PIN, 
-        #     pulse(ANGLE),
+        #     pulse(msg),
         #     )
         self.get_logger().info('servo_exec: %d' % msg.data)
 
 
-# def main():
-#     rclpy.init()
-#     executor = SingleThreadedExecutor()
-    
-#     ## ノードをインスタンス化しexecutorにadd
-#     # 1個目
-#     servo_1 = ServoNode(SERVO_PIN_1)
-#     executor.add_node(servo_1)
-    
-#     # # 2個目
-#     # servo_2 = ServoNode(SERVO_PIN_2)
-#     # executor.add_node(servo_2)
-    
-#     try:
-#         executor.spin()  # 無限ループ？
-#     except KeyboardInterrupt:  # Ctrl-C
-#         pass
-    
-#     ## ノード殺す
-#     executor.shutdown()
-#     servo_1.destroy_node()
-#     #servo_2.destroy_node()
-#     rclpy.shutdown()
-
-
-
 def main():
     rclpy.init()
-    #node = ServoNode(SERVO_PIN_1)
-    node = ServoNode()
+    executor = SingleThreadedExecutor()
+    
+    ## ノードをインスタンス化しexecutorにadd
+    # 1個目
+    servo_1 = ServoNode(SERVO_PIN_1)
+    executor.add_node(servo_1)
+    
+    # # 2個目
+    # servo_2 = ServoNode(SERVO_PIN_2)
+    # executor.add_node(servo_2)
+    
     try:
-        rclpy.spin(node)  # 無限ループ？
+        executor.spin()  # 無限ループ？
     except KeyboardInterrupt:  # Ctrl-C
         pass
     
     ## ノード殺す
-    node.destroy_node()
+    executor.shutdown()
+    servo_1.destroy_node()
     #servo_2.destroy_node()
     rclpy.shutdown()
+
+
+
+# def main():
+#     rclpy.init()
+#     node = ServoNode(SERVO_PIN_1)
+#     #node = ServoNode()
+#     try:
+#         rclpy.spin(node)  # 無限ループ？
+#     except KeyboardInterrupt:  # Ctrl-C
+#         pass
+    
+#     ## ノード殺す
+#     node.destroy_node()
+#     #servo_2.destroy_node()
+#     rclpy.shutdown()
 
 
 
