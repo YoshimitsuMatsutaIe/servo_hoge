@@ -19,7 +19,26 @@ def generate_launch_description():
         output='screen',
     )
     
-    return launch.LaunchDescription([controller,])
+    return launch.LaunchDescription([controller, servo])
+
+
+def generate_launch_description():
+    
+    
+    controller = launch_ros.actions.Node(
+        package='servo_hoge',
+        node_executable='controller',
+        output='screen',
+    )
+    
+    led = launch_ros.actions.Node(
+        package='servo_hoge',
+        node_executable='led',
+    )
+    
+    return launch.LaunchDescription([controller, led])
+
+
 
 # def generate_launch_description():
     

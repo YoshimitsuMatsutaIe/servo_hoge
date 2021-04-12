@@ -23,8 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'controller = servo_hoge.controller:main'
-            #'servo = servo_hoge.servo:main'
+            'controller = servo_hoge.controller:main',
+            'servo = servo_hoge.servo:main',
+            'led = servo_hoge.led:main'
         ],
     },
 )
