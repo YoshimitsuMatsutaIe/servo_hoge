@@ -33,7 +33,7 @@ class ControllerNode(Node):
         if angle > 179:
             angle = 180
         else:
-            angle += 10
+            angle += 1
 
 
 def main():
