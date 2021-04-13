@@ -17,7 +17,7 @@ class PikaPikaLed(Node):
             Int16,
             "led",
             self.led_callback,
-            10
+            10,
         )
     
     def init_led(self):
@@ -31,7 +31,7 @@ class PikaPikaLed(Node):
     def led_callback(self, msg):
         self.pi = pigpio.pi()
         self.pi.set_node(self.SERVO_PIN, pigpio.OUTPUT)
-        if int(msg) % 2 == 0:
+        if int(msg.data) % 2 == 0:
             self.pi.write(self.SERVO_PIN, 0)
             self.get_logger().info('led: 0')
         else:
