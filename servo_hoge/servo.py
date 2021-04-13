@@ -23,6 +23,7 @@ class ServoNode(Node):
     def __init__(self, SERVO_PIN):
         super().__init__("servo")
         self.SERVO_PIN = SERVO_PIN
+        self.init_motor()
         self.create_subscription(
             Int16, 
             "countup", 
@@ -30,15 +31,18 @@ class ServoNode(Node):
             10,
             )
     
-    # def init_motor(self):
-    #     pi = pigpio.pi()
+    def init_motor(self):
+        pi = pigpio.pi()
+        pi.set_mode(self.SERVO_PIN, pigpio.OUTPUT)
+        pi.set_servo_pulsewidth(self.SERVO_PIN, 500)
     
     def servo_callback(self, msg):
         """ANGLEにINT16？の信号がくる？"""
         self.pi = pigpio.pi()
+        self.pi.set_mode(self.SERVO_PIN, pigpio.OUTPUT)
         self.pi.set_servo_pulsewidth(
             self.SERVO_PIN, 
-            pulse(msg),
+            pulse(msg.data),
             )
         self.get_logger().info('servo_exec: %d' % msg.data)
 
