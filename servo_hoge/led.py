@@ -10,12 +10,12 @@ SERVO_PIN = 23
 class PikaPikaLed(Node):
 
     def __init__(self, SERVO_PIN):
-        super().__init__("led")
+        super().__init__("Led")
         self.SERVO_PIN = SERVO_PIN
         self.init_led()  # led初期化
         self.create_subscription(
             Int16,
-            "led",
+            "countup",
             self.led_callback,
             10,
         )
@@ -31,12 +31,13 @@ class PikaPikaLed(Node):
     def led_callback(self, msg):
         self.pi = pigpio.pi()
         self.pi.set_node(self.SERVO_PIN, pigpio.OUTPUT)
+        self.get_logger().info("led: %d" % msg.data)
         if int(msg.data) % 2 == 0:
-            self.pi.write(self.SERVO_PIN, 0)
-            self.get_logger().info('led: 0')
+            #self.pi.write(self.SERVO_PIN, 0)
+            self.get_logger().info('led: %d' % int(msg.data) % 2)
         else:
-            self.pi.write(self.SERVO_PIN, 1)
-            self.get_logger().info('led: 1')
+            #self.pi.write(self.SERVO_PIN, 1)
+            self.get_logger().info('led: %d' % int(msg.data) % 2)
 
 def main():
     rclpy.init()
