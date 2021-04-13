@@ -30,14 +30,14 @@ class PikaPikaLed(Node):
     
     def led_callback(self, msg):
         self.pi = pigpio.pi()
-        self.pi.set_node(self.SERVO_PIN, pigpio.OUTPUT)
+        self.pi.set_mode(self.SERVO_PIN, pigpio.OUTPUT)
         self.get_logger().info("led: %d" % msg.data)
         if int(msg.data) % 2 == 0:
-            #self.pi.write(self.SERVO_PIN, 0)
-            self.get_logger().info('led: %d' % int(msg.data) % 2)
+            self.pi.write(self.SERVO_PIN, 0)
+            #self.get_logger().info('led: %d' % int(msg.data) % 2)
         else:
-            #self.pi.write(self.SERVO_PIN, 1)
-            self.get_logger().info('led: %d' % int(msg.data) % 2)
+            self.pi.write(self.SERVO_PIN, 1)
+            #self.get_logger().info('led: %d' % int(msg.data) % 2)
 
 def main():
     rclpy.init()
