@@ -10,8 +10,8 @@ import pigpio
 PULSE_MIN = 500 + 10
 PULSE_MAX = 2500 - 10
 
-SERVO_PIN_1 = 23
-SERVO_PIN_2 = 24
+SERVO_PIN_1 = 24
+SERVO_PIN_2 = 23
 
 def pulse(ANGLE):
     """ANGLE[degree]からpwnパルス値を計算"""
@@ -34,7 +34,8 @@ class ServoNode(Node):
     def init_motor(self):
         self.pi = pigpio.pi()
         self.pi.set_mode(self.SERVO_PIN, pigpio.OUTPUT)
-        self.pi.set_servo_pulsewidth(self.SERVO_PIN, 500)
+        self.pi.set_servo_pulsewidth(self.SERVO_PIN, 1000)
+        self.get_logger().info('servoの初期化です')
     
     def servo_callback(self, msg):
         """ANGLEにINT16？の信号がくる？"""
