@@ -21,7 +21,7 @@ SERVO_PINS = [
     SERVO_PIN_4,
     SERVO_PIN_5
     ]
-SERVO_PINS = [23, 24, 22]
+SERVO_PINS = [23, 24, 22]  # 臨時
 
 
 def pulse(ANGLE):
@@ -31,14 +31,17 @@ def pulse(ANGLE):
 
 
 class ServoNode(Node):
-    
+    """サーボモータのnode
+    ・モーター指令角度[degree]をsubscriしてモーターを動かす
+    """
+
     def __init__(self, SERVO_NAME, SERVO_PIN):
-        super().__init__("servo_" + SERVO_NAME)
+        super().__init__('servo_' + SERVO_NAME)
         self.SERVO_PIN = SERVO_PIN
         self.init_motor()
         self.create_subscription(
             Int16,
-            "countup",
+            'command_angle_' + SERVO_NAME,
             self.servo_callback,
             10,
             )
@@ -63,12 +66,12 @@ def main():
     executor = SingleThreadedExecutor()
     
     ## ノードをインスタンス化しexecutorにadd
-    servo_nodes = []
+    nodes = []
     for i in range(len(SERVO_PINS)):
-        servo_name = str(i)
-        servo_nodes.append(ServoNode(servo_name, SERVO_PINS[i]))
+        node_name = str(i)
+        nodes.append(ServoNode(node_name, SERVO_PINS[i]))
     
-    for node in servo_nodes:
+    for node in nodes:
         executor.add_node(node)
     
     try:
@@ -79,7 +82,7 @@ def main():
     ## ノード終了
     executor.shutdown()
     
-    for node in servo_nodes:
+    for node in nodes:
         node.destroy_node()
     
     rclpy.shutdown()

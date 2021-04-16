@@ -4,22 +4,22 @@ import launch.substitutions
 import launch_ros.actions
 
 
-def generate_launch_description():
+# def generate_launch_description():
     
     
-    controller = launch_ros.actions.Node(
-        package='servo_hoge',
-        node_executable='controller',
-        output='screen',
-    )
+#     controller_2 = launch_ros.actions.Node(
+#         package='servo_hoge',
+#         node_executable='controller_2',
+#         output='screen',
+#     )
     
-    servo_2 = launch_ros.actions.Node(
-        package='servo_hoge',
-        node_executable='servo_2',
-        output='screen',
-    )
+#     servo_2 = launch_ros.actions.Node(
+#         package='servo_hoge',
+#         node_executable='servo_2',
+#         output='screen',
+#     )
     
-    return launch.LaunchDescription([controller, servo_2,])
+#     return launch.LaunchDescription([controller, servo_2,])
 
 
 # def generate_launch_description():
@@ -41,15 +41,13 @@ def generate_launch_description():
 
 
 
-# def generate_launch_description():
+def generate_launch_description():
     
     
-#     controller = launch_ros.actions.Node(
-#         package='servo_hoge',
-#         node_executable='controller',
-#         output='screen',
-#     )
+    camera = launch_ros.actions.Node(
+        package='servo_hoge',
+        node_executable='camera',
+        output='screen',
+    )
     
-#     return launch.LaunchDescription(
-#         [controller]
-#         )
+    return launch.LaunchDescription([camera],)
