@@ -13,13 +13,13 @@ def generate_launch_description():
         output='screen',
     )
     
-    servo = launch_ros.actions.Node(
+    servo_2 = launch_ros.actions.Node(
         package='servo_hoge',
-        node_executable='servo',
+        node_executable='servo_2',
         output='screen',
     )
     
-    return launch.LaunchDescription([controller, servo,])
+    return launch.LaunchDescription([controller, servo_2,])
 
 
 # def generate_launch_description():
