@@ -21,6 +21,8 @@ SERVO_PINS = [
     SERVO_PIN_4,
     SERVO_PIN_5
     ]
+SERVO_PINS = [23, 24, 22]
+
 
 def pulse(ANGLE):
     """ANGLE[degree]からpwnパルス値を計算"""
@@ -62,7 +64,7 @@ def main():
     
     ## ノードをインスタンス化しexecutorにadd
     servo_nodes = []
-    for i in range(5):
+    for i in range(len(SERVO_PINS)):
         servo_name = str(i)
         servo_nodes.append(ServoNode(servo_name, SERVO_PINS[i]))
     
